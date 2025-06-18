@@ -1,4 +1,5 @@
 {% load static %}
+{% load static_pages %}
 
 <!-- Footer -->
 <footer id="footer" class="footer md-pb-70">
@@ -24,7 +25,7 @@
                                     <p>Phone: <a href="#">(212) 555-1234</a></p>
                                 </li>
                             </ul>
-                            <a href="contact-1.html" class="tf-btn btn-line">Get direction<i
+                            <a href="{% url 'content:static_page_detail' slug='contact' %}" class="tf-btn btn-line">Get direction<i
                                     class="icon icon-arrow1-top-left"></i></a>
                             <ul class="tf-social-icon d-flex gap-10">
                                 <li><a href="#" class="box-icon w_34 round social-facebook social-line"><i
@@ -242,6 +243,29 @@
         </div>
     </li>
     {% endfor %}
+
+    <!-- static page mobile navbar -->
+
+    
+
+         {% get_static_pages as pages %}
+                                    {% for page in pages %}
+              <li class="nav-mb-item" style="margin:5px;">
+                                        <a href="{% url 'content:static_page_detail' slug=page.slug %}" class="item-link">
+                                        {{ page.title }}
+
+                                        </a>
+                                        
+                                    </li>
+                                    
+                                    {% endfor %}
+                               
+
+    </li>
+
+
+
+
 </ul>
 
                 
@@ -252,7 +276,7 @@
                         <a href="{% url 'search:search' %}" class="site-nav-icon"><i class="icon icon-search"></i>Search</a>
                     </div>
                     <div class="mb-notice">
-                        <a href="contact-1.html" class="text-need">Need help ?</a>
+                        <a href="{% url 'content:static_page_detail' slug='contact' %}" class="text-need">Need help ?</a>
                     </div>
                     <ul class="mb-info">
                         <li>Address: 1234 Fashion Street, Suite 567, <br> New York, NY 10001</li>

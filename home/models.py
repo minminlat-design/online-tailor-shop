@@ -44,6 +44,7 @@ class ShopGram(models.Model):
     is_active = models.BooleanField(default=True)
     created_at = models.DateTimeField(auto_now_add=True)
     order = models.PositiveSmallIntegerField(default=0)
+    source_url = models.URLField(blank=True, null=True) 
     
     class Meta:
         ordering = ['order', '-created_at']

@@ -32,6 +32,7 @@ urlpatterns = [
     path('measurements/', include('measurement.urls')),
     path('orders/', include('orders.urls', namespace='orders')),
     path('admin-panel/', include('admin_dashboard.urls', namespace='admin_dashboard')),
+    path('', include('content.urls', namespace='content')),
 
 
    

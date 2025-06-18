@@ -1,14 +1,12 @@
 from celery import shared_task
-from django.core.mail import send_mail
+from django.core.mail import send_mail, EmailMessage
 from .models import Order
 from io import BytesIO
 import weasyprint
 from django.contrib.staticfiles import finders
-from django.core.mail import EmailMessage
 from django.template.loader import render_to_string
 from django.conf import settings
-
-
+from .utils import send_sms  # import your SMS utility
 
 
 @shared_task
@@ -34,15 +32,11 @@ def order_created(order_id):
     mail_sent = send_mail(
         subject,
         message,
-        settings.DEFAULT_FROM_EMAIL,  # Consider using settings.DEFAULT_FROM_EMAIL
+        settings.DEFAULT_FROM_EMAIL,
         [order.email]
     )
 
     return f"Mail sent: {mail_sent}"
-
-
-
-
 
 
 @shared_task
@@ -57,22 +51,25 @@ def payment_completed(order_id):
             subject, message, settings.DEFAULT_FROM_EMAIL, [order.email]
         )
 
-        # generate PDF
-        html = render_to_string('orders/order/pdf.html', {'order': order})
+        # Generate PDF
+        html = render_to_string('orders/pdf.html', {'order': order})
         out = BytesIO()
         stylesheets = [weasyprint.CSS(finders.find('css/pdf.css'))]
         weasyprint.HTML(string=html).write_pdf(out, stylesheets=stylesheets)
 
-        # attach PDF
-        email.attach(
-            f'order_{order.id}.pdf', out.getvalue(), 'application/pdf'
-        )
-
+        # Attach PDF
+        email.attach(f'order_{order.id}.pdf', out.getvalue(), 'application/pdf')
         email.send()
-        return f"Invoice email sent for order {order.id}"
-    
+
+        # Send SMS confirmation
+        if order.phone:
+            sms_message = f"Hi {order.first_name}, your payment for Order #{order.id} was successful. Thank you!"
+            send_sms(order.phone, sms_message)
+            print(f"SMS sent to {order.phone}")
+
+        return f"Invoice email and SMS sent for order {order.id}"
+
     except Order.DoesNotExist:
         return f"Order {order_id} does not exist."
     except Exception as e:
-        return f"Failed to send invoice email for order {order_id}: {str(e)}"
-
+        return f"Failed to complete post-payment actions for order {order_id}: {str(e)}"

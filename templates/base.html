@@ -85,6 +85,18 @@ input[type="radio"]:checked + label.color-option .option-img-wrapper {
 }
 
 
+.zoom-wrapper {
+  overflow: hidden;
+  display: inline-block;
+  max-height: 80vh;
+  cursor: grab;
+}
+.zoom-wrapper img:active {
+  cursor: grabbing;
+}
+
+
+
   
 
 
@@ -128,10 +140,14 @@ input[type="radio"]:checked + label.color-option .option-img-wrapper {
     <script type="text/javascript" src="{% static 'js/nouislider.min.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/shop.js' %}"></script>
     <script type="text/javascript" src="{% static 'js/main.js' %}"></script>
+
+    <script type="text/javascript" src="{% static 'js/appointment.js' %}"></script>
     
 
     <script type="module" src="{% static 'js/model-viewer.min.js' %}"></script>
     <script type="module" src="{% static 'js/zoom.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@panzoom/panzoom@9.4.0/dist/panzoom.min.js"></script>
+
 
 
 

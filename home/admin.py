@@ -38,13 +38,15 @@ class LookBookAdmin(admin.ModelAdmin):
     
 
 
-# Shop Gram  admin    
+
+# Shop Gram admin    
 @admin.register(ShopGram)
 class ShopGramAdmin(admin.ModelAdmin):
     list_display = ['admin_thumbnail', 'caption', 'created_at', 'is_active']
-    list_filter = ['is_active',]
-    search_fields = ['name']
-    
+    list_filter = ['is_active']
+    search_fields = ['caption']  # corrected from 'name' unless you have a 'name' field
+    fields = ['caption', 'image', 'products', 'source_url', 'is_active', 'order']  # ✅ include source_url
+
     def admin_thumbnail(self, obj):
         if obj.image:
             thumbnail_url = get_thumbnailer(obj.image).get_thumbnail({'size': (100, 60), 'crop': True}).url

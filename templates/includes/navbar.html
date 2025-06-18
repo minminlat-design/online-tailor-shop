@@ -1,4 +1,5 @@
 {% load static %}
+{% load static_pages %}
 
 <!-- RTL -->
     <!-- <a href="javascript:void(0);" id="toggle-rtl" class="tf-btn animate-hover-btn btn-fill">RTL</a> -->
@@ -296,6 +297,24 @@
                                 </li>
 
                                 {% endfor %}
+
+
+                                <!--static pages-->
+                                
+                                
+                                    {% get_static_pages as pages %}
+                                    {% for page in pages %}
+                                     <li class="menu-item position-relative">
+                                        <a href="{% url 'content:static_page_detail' slug=page.slug %}" class="item-link">
+                                        {{ page.title }}
+                                       
+                                        </a>
+                                    </li>
+                                    {% endfor %}
+                               
+
+                                   
+
                                 
                             </ul>
                         </nav>
